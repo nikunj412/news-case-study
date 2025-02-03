@@ -3,21 +3,14 @@ import "./NewsFeed.css";
 import BBCLogo from "../assets/bbc-logo.png";
 import GuardianLogo from "../assets/guardian-logo.jpeg";
 import NYTLogo from "../assets/nyt-logo.jpg";
-
-interface Article {
-  title: string;
-  description: string;
-  url: string;
-  source: string;
-  image: string;
-}
+import { Article } from "../app.model";
 
 interface NewsFeedProps {
   articles: Article[];
 }
 
 const NewsFeed: React.FC<NewsFeedProps> = ({ articles }) => {
-  const [visibleArticles, setVisibleArticles] = useState(10);
+  const [visibleArticles, setVisibleArticles] = useState<number>(10);
 
   const loadMoreArticles = () => {
     setVisibleArticles((prev: number) => prev + 10);
@@ -60,6 +53,14 @@ const NewsFeed: React.FC<NewsFeedProps> = ({ articles }) => {
             />
             <h2>{article.title}</h2>
             <p>{article.description}</p>
+            <p className="published-date">
+              <span>
+                Published Date:{" "}
+                {new Intl.DateTimeFormat("en-GB", { timeZone: "UTC" }).format(
+                  new Date(article.publishedAt)
+                )}
+              </span>
+            </p>
             <a
               href={article.url}
               target="_blank"

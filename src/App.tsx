@@ -7,22 +7,51 @@ import {
   fetchGuardianNews,
   fetchNYTNews,
 } from "./services/newsApi";
+import { Article, Filters } from "./app.model";
 
 const App: React.FC = () => {
-  const [articles, setArticles] = useState<any[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSearch = async (query: string, filters: any) => {
+  const handleSearch = async (query: string, filters: Filters) => {
     setLoading(true);
     try {
-      const [guardianNews, nytNews, bbcNews] = await Promise.all([
-        fetchGuardianNews(query, filters),
-        fetchNYTNews(query, filters),
-        fetchBBCNews(query, filters),
-      ]);
+      let apiPromises: Promise<Article[]>[] = [];
 
-      const combinedArticles = [...guardianNews, ...nytNews, ...bbcNews];
-      setArticles(combinedArticles);
+      if (!filters.sources.length) {
+        // Call all APIs if no source is selected
+        apiPromises = [
+          fetchGuardianNews(query, filters),
+          fetchNYTNews(query, filters),
+          fetchBBCNews(query, filters),
+        ];
+      } else {
+        if (filters.sources.includes("guardian")) {
+          apiPromises.push(fetchGuardianNews(query, filters));
+        }
+        if (filters.sources.includes("nyt")) {
+          apiPromises.push(fetchNYTNews(query, filters));
+        }
+        if (filters.sources.includes("bbc")) {
+          apiPromises.push(fetchBBCNews(query, filters));
+        }
+      }
+
+      const results = await Promise.all(apiPromises);
+      const combinedArticles = results.flat();
+
+      const formattedArticles = combinedArticles.map((article) => ({
+        ...article,
+        publishedAt: new Date(article.publishedAt),
+      }));
+
+      // Sort articles by publication date (most recent first)
+      formattedArticles.sort(
+        (a, b) =>
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      );
+
+      setArticles(formattedArticles);
     } catch (error) {
       console.error("Error fetching news:", error);
     } finally {
