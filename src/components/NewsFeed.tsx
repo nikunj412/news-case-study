@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./NewsFeed.css";
 import BBCLogo from "../assets/bbc-logo.png";
 import GuardianLogo from "../assets/guardian-logo.jpeg";
@@ -29,8 +29,18 @@ const NewsFeed: React.FC<NewsFeedProps> = ({ articles }) => {
     }
   };
 
+  useEffect(() => {
+    if (articles.length > 0) {
+      setVisibleArticles(10);
+    }
+  }, [articles]);
+
   if (articles.length === 0) {
-    return <div className="no-data">No articles found.</div>;
+    return (
+      <div className="no-data">
+        No articles found. Try changing your query or filters.
+      </div>
+    );
   }
 
   return (

@@ -74,7 +74,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
             border: "1px solid #ddd",
           }}
         >
-          <option value="all">Select Category</option>
+          <option value="">Select Category</option>
           <option value="technology">Technology</option>
           <option value="sports">Sports</option>
           <option value="business">Business</option>
@@ -103,6 +103,41 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
             }}
           />
         </div>
+        <div
+          style={{
+            marginTop: "10px",
+            display: "flex",
+            justifyContent: "space-around",
+          }}
+        >
+          <label>
+            <input
+              type="checkbox"
+              value="guardian"
+              checked={sources.includes("guardian")}
+              onChange={() => handleSourceChange("guardian")}
+            />
+            The Guardian
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="nyt"
+              checked={sources.includes("nyt")}
+              onChange={() => handleSourceChange("nyt")}
+            />
+            NYT
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              value="bbc"
+              checked={sources.includes("bbc")}
+              onChange={() => handleSourceChange("bbc")}
+            />
+            BBC
+          </label>
+        </div>
         <button
           onClick={handleSearch}
           style={{
@@ -116,35 +151,6 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
         >
           Search
         </button>
-      </div>
-      <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
-        <label>
-          <input
-            type="checkbox"
-            value="guardian"
-            checked={sources.includes("guardian")}
-            onChange={() => handleSourceChange("guardian")}
-          />
-          The Guardian
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="nyt"
-            checked={sources.includes("nyt")}
-            onChange={() => handleSourceChange("nyt")}
-          />
-          NYT
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="bbc"
-            checked={sources.includes("bbc")}
-            onChange={() => handleSourceChange("bbc")}
-          />
-          BBC
-        </label>
       </div>
       {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
     </div>
