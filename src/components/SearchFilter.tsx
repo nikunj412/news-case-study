@@ -74,7 +74,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({ onSearch }) => {
             border: "1px solid #ddd",
           }}
         >
-          <option value="all">All Categories</option>
+          <option value="all">Select Category</option>
           <option value="technology">Technology</option>
           <option value="sports">Sports</option>
           <option value="business">Business</option>
